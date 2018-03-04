@@ -4,7 +4,6 @@ class NegociacaoController
     constructor()
     {
         let $ = document.querySelector.bind(document);
-
         this._inputData = $('#data');
         this._inputQuantidade = $('#quantidade');
         this._inputValor = $('#valor');
@@ -14,12 +13,8 @@ class NegociacaoController
     adiciona(event)
     {
         event.preventDefault();
-
         this._listaNegociacoes.adiciona(this._criaNegociacao());
         this._limpaFormulario();
-
-        console.log(this._listaNegociacoes.negociacoes);
-
     }
 
     _criaNegociacao()

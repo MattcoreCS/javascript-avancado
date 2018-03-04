@@ -1,6 +1,7 @@
 class DateHelper
 {
-	constructor() {
+	constructor()
+	{
 		throw new Error('Esta classe não pode ser instanciada. (Static class)');
 	}
 
@@ -11,9 +12,9 @@ class DateHelper
 
 	static textoParaData(texto)
 	{
-		if(!/\d{4}-\d{2}-\d{2}/.test(texto))
+		if(!/^\d{4}-\d{2}-\d{2}$/.test(texto))
 			throw new Error('A conversão texto para data deve estar no formato yyyy-mm-dd');
-		
+
 		return new Date(...texto.split('-').map((item, indice) => item - indice % 2));
 	}
 }
