@@ -1,10 +1,12 @@
 var ConnectionFactory = (function() {
 
-    var stores = ['negociacoes'];
-    var version = 3;
-    var dbName = 'negociacoes';
+    const stores = ['negociacoes'];
+    const version = 3;
+    const dbName = 'negociacoes';
 
     var connection = null;
+
+    var close = null;
 
     return class ConnectionFactory {
         constructor() {
@@ -19,8 +21,13 @@ var ConnectionFactory = (function() {
                 };
 
                 openRequest.onsuccess = e => {
-                    if (!connection)
+                    if (!connection) {
                         connection = e.target.result;
+                        close = connection.close.bind(connection);
+                        connection.close = function() {
+                          throw new Error('É impossível fechar a conexão.');
+                        };
+                    }
 
                     resolve(e.target.result);
                 };
@@ -39,6 +46,14 @@ var ConnectionFactory = (function() {
 
                 connection.createObjectStore(store, {autoIncrement: true});
             });
+        }
+
+        static closeConnection()
+        {
+            if(connection) {
+                close();
+                connection = null;
+            }
         }
     }
 })();
