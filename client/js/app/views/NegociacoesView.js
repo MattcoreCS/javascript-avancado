@@ -3,7 +3,7 @@ class NegociacoesView extends View
 	template(model)
 	{
 		return `
-		<table class="ui selectable inverted table">
+		<table class="table table-hover table-bordered">
 	        <thead>
 	            <tr>
 	                <th onclick="negociacaoController.ordena('data')">DATA</th>
