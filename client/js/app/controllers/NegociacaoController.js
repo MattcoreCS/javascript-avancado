@@ -16,6 +16,11 @@ class NegociacaoController
 
         this._mensagem = new Bind(new Mensagem(), new MensagemView($('#mensagemView')), 'texto');
 
+        this._init();        
+    }
+
+    _init()
+    {
         ConnectionFactory
             .getConnection()
             .then(connection => new NegociacaoDao(connection))
@@ -27,6 +32,10 @@ class NegociacaoController
                 console.log(erro);
                 this._mensagem.texto = erro;
             })
+
+        setInterval(() => {
+            this.importaNegociacoes();
+        }, 3000);
     }
 
     adiciona(event)
@@ -55,7 +64,8 @@ class NegociacaoController
             .obterNegociacoes()
             .then(negociacoes =>
                 negociacoes.filter(negociacao =>
-                this._listaNegociacoes.negociacoes.indexOf(negociacao) == -1)
+                    !this._listaNegociacoes.negociacoes.some(negociacaoExistente =>
+                        JSON.stringify(negociacao) == JSON.stringify(negociacaoExistente)))
             )
             .then(negociacoes => {
                 negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
