@@ -1,9 +1,9 @@
 'use strict';
 
-System.register(['./View', '../helpers/DateHelper'], function (_export, _context) {
+System.register(['./View', '../helpers/DateHelper', '../controllers/NegociacaoController'], function (_export, _context) {
 	"use strict";
 
-	var View, DateHelper, _createClass, NegociacoesView;
+	var View, DateHelper, currentInstance, _createClass, NegociacoesView;
 
 	function _classCallCheck(instance, Constructor) {
 		if (!(instance instanceof Constructor)) {
@@ -40,6 +40,8 @@ System.register(['./View', '../helpers/DateHelper'], function (_export, _context
 			View = _View2.View;
 		}, function (_helpersDateHelper) {
 			DateHelper = _helpersDateHelper.DateHelper;
+		}, function (_controllersNegociacaoController) {
+			currentInstance = _controllersNegociacaoController.currentInstance;
 		}],
 		execute: function () {
 			_createClass = function () {
@@ -63,16 +65,21 @@ System.register(['./View', '../helpers/DateHelper'], function (_export, _context
 			_export('NegociacoesView', NegociacoesView = function (_View) {
 				_inherits(NegociacoesView, _View);
 
-				function NegociacoesView() {
+				function NegociacoesView(elemento) {
 					_classCallCheck(this, NegociacoesView);
 
-					return _possibleConstructorReturn(this, (NegociacoesView.__proto__ || Object.getPrototypeOf(NegociacoesView)).apply(this, arguments));
+					var _this = _possibleConstructorReturn(this, (NegociacoesView.__proto__ || Object.getPrototypeOf(NegociacoesView)).call(this, elemento));
+
+					elemento.addEventListener('click', function (event) {
+						if (event.target.nodeName == 'TH') currentInstance().ordena(event.target.textContent.toLowerCase());
+					});
+					return _this;
 				}
 
 				_createClass(NegociacoesView, [{
 					key: 'template',
 					value: function template(model) {
-						return '\n\t\t<table class="table table-hover table-bordered">\n\t        <thead>\n\t            <tr>\n\t                <th onclick="negociacaoController.ordena(\'data\')">DATA</th>\n\t                <th onclick="negociacaoController.ordena(\'quantidade\')">QUANTIDADE</th>\n\t                <th onclick="negociacaoController.ordena(\'valor\')">VALOR</th>\n\t                <th onclick="negociacaoController.ordena(\'volume\')">VOLUME</th>\n\t            </tr>\n\t        </thead>\n\t        \n\t        <tbody>\n\t        \t' + model.negociacoes.map(function (n) {
+						return '\n\t\t<table class="table table-hover table-bordered">\n\t        <thead>\n\t            <tr>\n\t                <th>DATA</th>\n\t                <th>QUANTIDADE</th>\n\t                <th>VALOR</th>\n\t                <th>VOLUME</th>\n\t            </tr>\n\t        </thead>\n\t        \n\t        <tbody>\n\t        \t' + model.negociacoes.map(function (n) {
 							return '\n        \t\t\t<tr>\n        \t\t\t\t<td>' + DateHelper.dataParaTexto(n.data) + '</td>\n        \t\t\t\t<td>' + n.quantidade + '</td>\n        \t\t\t\t<td>' + n.valor + '</td>\n        \t\t\t\t<td>' + n.volume + '</td>\n        \t\t\t</tr>\t\n\t        \t';
 						}).join('') + '\n\t        </tbody>\n\t        \n\t        <tfoot>\n\t        \t<td colspan="3"></td>\n\t        \t<td>' + model.volumeTotal + '</td>\n\t        </tfoot>\n\t    </table>\n\t\t';
 					}
